@@ -196,7 +196,7 @@ abstract public class Animal extends Mobile implements IAnimal, ILocatable, IMov
      *
      * @return the position
      */
-    private Point getPosition() {
+    public Point getPosition() {
         return this.position;
     }
 
@@ -211,7 +211,6 @@ abstract public class Animal extends Mobile implements IAnimal, ILocatable, IMov
     public double getTotaldistance() {
         return getTotalDistance();
     }
-
 
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -240,6 +239,9 @@ abstract public class Animal extends Mobile implements IAnimal, ILocatable, IMov
     public int getEnergyAmount() {
         return energyAmount;
     }
+    public void setEnergyAmount(int energyAmount) {
+        this.energyAmount = energyAmount;
+    }
 
     private BufferedImage flipImage(BufferedImage img, boolean horizontal, boolean vertical) {
         int w = img.getWidth();
@@ -264,6 +266,24 @@ abstract public class Animal extends Mobile implements IAnimal, ILocatable, IMov
     public int getIntSpeed(){
         return (int)speed;
     }
+
+    public void setImage() {
+        switch (this.orien) {
+            case EAST:
+                this.img1 = img1;
+                break;
+            case SOUTH:
+                this.img2 = flipImage(img1, false, true);
+                break;
+            case WEST:
+                this.img3 = img1;
+                break;
+            case NORTH:
+                this.img4 = flipImage(img1, true, true);
+                break;
+        }
+    }
+
 
     public void setPosition(Point p) {
         super.setLocation(p);
@@ -314,6 +334,13 @@ abstract public class Animal extends Mobile implements IAnimal, ILocatable, IMov
 			g.drawImage(img3, position.getX(), position.getY(), 65, 65, null);
 		else if(orien == Orientation.NORTH) // animal move to the north side
             g.drawImage(img4, position.getX(), position.getY(), 65, 65, null);
+    }
+
+    public int getImageWidth() {
+        return img1.getWidth();
+    }
+    public int getImageHeight() {
+        return img1.getHeight();
     }
 
     /**

@@ -133,7 +133,7 @@ public class AddAnimalDialog extends JDialog {
         addButton.addActionListener(e -> {
             Animal animal = createAnimal(zooPanel);
             if (animal != null) {
-                zooPanel.addAnimal(animal);
+                zooPanel.addAnimal(animal, (String)compType.getSelectedItem());
             }
             this.dispose();
         });

@@ -2,6 +2,8 @@ package graphics;
 import javax.swing.*;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -65,9 +67,10 @@ public class ZooPanel extends JPanel {
         }
     }
 
-    public void addAnimal(Animal animal) {
+    public void addAnimal(Animal animal, String competitionType) {
         curr_animals.add(animal);
         repaint();
+        moveAnimalWithAnimation(animal, competitionType);
     }
 
     public void clearAnimals() {
@@ -138,6 +141,65 @@ public class ZooPanel extends JPanel {
 
         JOptionPane.showMessageDialog(this, scrollPane, "Animal Info", JOptionPane.INFORMATION_MESSAGE);
 
+    }
+
+    public void moveAnimalWithAnimation(Animal animal, String competitionType) {
+        Timer timer = new Timer(50, null);
+        timer.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (animal.getEnergyAmount() < animal.getEnergyPerMeter()) {
+                    timer.stop();
+                    return;
+                }
+
+                Point position = animal.getPosition();
+                int speed = animal.getIntSpeed();
+                int energyPerMeter = animal.getEnergyPerMeter();
+                int panelWidth = getWidth();
+                int panelHeight = getHeight();
+
+                animal.setEnergyAmount(animal.getEnergyAmount() - energyPerMeter);
+
+                if (competitionType.equals("Land")) {
+                    if (position.getX() + speed >= panelWidth - animal.getImageWidth() && animal.getOrientation().equals(Animal.Orientation.EAST)) {
+                        animal.setOrientation(Animal.Orientation.SOUTH);
+                        animal.setImage(); // Assuming southFacingImage is defined
+                    } else if (position.getY() + speed >= panelHeight - animal.getImageHeight() && animal.getOrientation().equals(Animal.Orientation.SOUTH)) {
+                        animal.setOrientation(Animal.Orientation.WEST);
+                        animal.setImage(); // Assuming westFacingImage is defined
+                    } else if (position.getX() - speed <= 0 && animal.getOrientation().equals(Animal.Orientation.WEST)) {
+                        animal.setOrientation(Animal.Orientation.NORTH);
+                        animal.setImage(); // Assuming northFacingImage is defined
+                    } else if (position.getY() - speed <= 0 && animal.getOrientation().equals(Animal.Orientation.NORTH)) {
+                        animal.setOrientation(Animal.Orientation.EAST);
+                        animal.setImage(); // Assuming eastFacingImage is defined
+                    }
+                }
+
+                switch (animal.getOrientation()) {
+                    case Animal.Orientation.EAST:
+                        animal.setPosition(new Point(animal.getPosition().getX() + speed,animal.getPosition().getY()));
+                        break;
+                    case Animal.Orientation.SOUTH:
+                        animal.setPosition(new Point(animal.getPosition().getX(),animal.getPosition().getY() + speed));
+                        break;
+                    case Animal.Orientation.WEST:
+                        animal.setPosition(new Point(animal.getPosition().getX() - speed,animal.getPosition().getY()));
+                        break;
+                    case Animal.Orientation.NORTH:
+                        animal.setPosition(new Point(animal.getPosition().getX(),animal.getPosition().getY() - speed));
+                        break;
+                }
+
+                if (!competitionType.equals("Land") && position.getX() >= (panelWidth * 8 / 11)) {
+                    timer.stop();
+                }
+
+                repaint();
+            }
+        });
+        timer.start();
     }
 }
 
