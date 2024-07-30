@@ -13,6 +13,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * The Animal class represents a general animal with several attributes and behaviors.
@@ -273,7 +275,7 @@ abstract public class Animal extends Mobile implements IAnimal, ILocatable, IMov
             return false;
         } else {
             double distance = calcDistance(p);
-            setLocation(p);
+            setPosition(p);
             addTotalDistance(distance);
             return true;
         }

@@ -42,14 +42,12 @@ public class ZooPanel extends JPanel {
                     animal.setPosition(new Point(panelWidth / 12, panelHeight / 9 + ((panelHeight - 20) * 2 / 9 * (competition[1]))));
                     competition[1]++;
                 }
-            }
-            else if (animal instanceof TerrestrialAnimal)
+            } else if (animal instanceof TerrestrialAnimal)
                 animal.setPosition(new Point(0, 0));
             else if (animal instanceof WaterAnimal) {
                 animal.setPosition(new Point(panelWidth / 12, panelHeight / 9 + ((panelHeight - 20) * 2 / 9 * (competition[1]))));
                 competition[1]++;
-            }
-            else if (animal instanceof AirAnimal) {
+            } else if (animal instanceof AirAnimal) {
                 animal.setPosition(new Point(panelWidth / 12, (panelWidth - 10) * 2 / 9 * competition[2]));
                 competition[2]++;
             }
@@ -84,6 +82,31 @@ public class ZooPanel extends JPanel {
         }
     }
 
+    private void insertData(Object[][] data, ArrayList<Animal> animals) {
+        for (int i = 0; i < animals.size(); i++) {
+            Animal animal = animals.get(i);
+            data[i][0] = animal.getName(); // Assuming getName() exists in Animal
+            data[i][1] = getCategory(animal); // Assuming getCategory() returns Air, Water, or Terrestrial
+            data[i][2] = animal.getClass().getSimpleName(); // Assuming the type is the class name
+            data[i][3] = animal.getSpeed(); // Assuming getSpeed() exists in Animal
+            data[i][4] = animal.getEnergyAmount(); // Assuming getEnergyAmount() exists in Animal
+            data[i][5] = animal.getTotalDistance(); // Using getTotalDistance() from Mobile
+            data[i][6] = animal.getEnergyConsumption(); // Assuming getEnergyConsumption() exists in Animal
+        }
+    }
+
+    private String getCategory(Animal animal) {
+        if (animal instanceof Alligator)
+            return "Terres/Water";
+        if (animal instanceof AirAnimal) {
+            return "Air";
+        } else if (animal instanceof WaterAnimal) {
+            return "Water";
+        } else {
+            return "Terrestrial";
+        }
+    }
+
     public void showInfo() {
         String[] columnNames = {"Animal", "Competition", "Type", "Speed", "Energy Amount", "Distance", "Energy Consumption"};
         Object[][] data = new Object[curr_animals.size() + del_animals.size()][7];
@@ -114,30 +137,29 @@ public class ZooPanel extends JPanel {
         scrollPane.setPreferredSize(new Dimension(800, 300));
 
         JOptionPane.showMessageDialog(this, scrollPane, "Animal Info", JOptionPane.INFORMATION_MESSAGE);
-    }
 
-    private void insertData(Object[][] data, ArrayList<Animal> animals) {
-        for (int i = 0; i < animals.size(); i++) {
-            Animal animal = animals.get(i);
-            data[i][0] = animal.getName(); // Assuming getName() exists in Animal
-            data[i][1] = getCategory(animal); // Assuming getCategory() returns Air, Water, or Terrestrial
-            data[i][2] = animal.getClass().getSimpleName(); // Assuming the type is the class name
-            data[i][3] = animal.getSpeed(); // Assuming getSpeed() exists in Animal
-            data[i][4] = animal.getEnergyAmount(); // Assuming getEnergyAmount() exists in Animal
-            data[i][5] = animal.getTotalDistance(); // Using getTotalDistance() from Mobile
-            data[i][6] = animal.getEnergyConsumption(); // Assuming getEnergyConsumption() exists in Animal
-        }
-    }
-
-    private String getCategory(Animal animal) {
-        if (animal instanceof Alligator)
-            return "Terres/Water";
-        if (animal instanceof AirAnimal) {
-            return "Air";
-        } else if (animal instanceof WaterAnimal) {
-            return "Water";
-        } else {
-            return "Terrestrial";
-        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
