@@ -1,7 +1,3 @@
-/**
- * Submitter: Matan Ofri
- * ID: 206919680
- */
 package system;
 import Olympics.Medal;
 import animals.*;

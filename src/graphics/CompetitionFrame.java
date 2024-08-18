@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 public class CompetitionFrame extends JFrame {
     private List<Animal> animals;
     private int[] compatition;
+    private int[] tournamentType;
     private final JButton addC;
     private final JButton addA;
     private final JButton clear;
@@ -32,7 +33,9 @@ public class CompetitionFrame extends JFrame {
         this.setLocationRelativeTo(null);
         animals = new ArrayList<>();
         compatition = new int[3];
+        tournamentType = new int[3];
         Arrays.fill(compatition, -1);
+        Arrays.fill(tournamentType, -1);
 
         zooPanel = new ZooPanel();
         this.add(zooPanel, BorderLayout.CENTER);
@@ -87,10 +90,10 @@ public class CompetitionFrame extends JFrame {
         });
 
         addC.addActionListener(e -> {
-            AddCompetitionDialog compFrame = new AddCompetitionDialog(compatition, this);
+            AddCompetitionDialog compFrame = new AddCompetitionDialog(compatition, tournamentType, this);
         });
         addA.addActionListener(e -> {
-            AddAnimalDialog newAnimal = new AddAnimalDialog(CompetitionFrame.this, zooPanel, compatition);
+            AddAnimalDialog newAnimal = new AddAnimalDialog(CompetitionFrame.this, zooPanel, compatition, tournamentType);
         });
         clear.addActionListener(e -> {
             zooPanel.clearAnimals();

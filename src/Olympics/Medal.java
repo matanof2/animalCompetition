@@ -1,7 +1,3 @@
-/**
- * Submitter: Matan Ofri
- * ID: 206919680
- */
 package Olympics;
 
 import java.util.Objects;

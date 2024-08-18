@@ -1,7 +1,3 @@
-/**
- * Submitter: Matan Ofri
- * ID: 206919680
- */
 package animals;
 import Olympics.Medal;
 import graphics.*;
@@ -107,6 +103,9 @@ abstract public class Animal extends Mobile implements IAnimal, ILocatable, IMov
         }
     }
 
+    public double getDistance(){
+        return super.getTotalDistance();
+    }
     public void addTotalDistance(double distance) {
         if (distance > 0) {
             setTotalDistance(getTotalDistance() + distance);

@@ -1,7 +1,6 @@
 package graphics;
 import animals.*;
 import mobility.Point;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,17 +10,19 @@ import java.util.Objects;
 public class AddAnimalDialog extends JDialog {
     private JComboBox<String> animalTypeComboBox;
     private JTextField nameField, weightField, speedField, energyPerMeter, breedField, lengthField, altitudeOfFlightField, wingspanField, familyField, foodTypeField, areaOfLiving;
-    private JComboBox<String> genderComboBox, toxicityComboBox, waterTypeComboBox, imageComboBox, compType;
-    private JPanel dynamicPanel;
+    private JComboBox<String> genderComboBox, toxicityComboBox, waterTypeComboBox, imageComboBox, compType, group;
+    private JPanel dynamicPanel, groupaPanel;
     private JCheckBox castratedCheckBox;
     private int[] competition;
+    private int[] tournament;
 
-    public AddAnimalDialog(Frame owner, ZooPanel zooPanel, int[] competition) {
+    public AddAnimalDialog(Frame owner, ZooPanel zooPanel, int[] competition, int[] tournamentType) {
         super(owner, "Add Animal", true);
-        this.setSize(400, 420);
+        this.setSize(470, 450);
         this.setLocationRelativeTo(owner); // Open in the center of the screen
 
         this.competition = competition;
+        this.tournament = tournamentType;
 
         JPanel mainPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -35,8 +36,14 @@ public class AddAnimalDialog extends JDialog {
         compType = new JComboBox<>(new String[]{"Land", "Water", "Air"});
         mainPanel.add(compType, gbc);
 
+        groupaPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
         gbc.gridy = 1;
+        gbc.gridwidth = 2;
+        mainPanel.add(groupaPanel, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         mainPanel.add(new JLabel("Animal Type:"), gbc);
 
         gbc.gridx = 1;
@@ -44,7 +51,7 @@ public class AddAnimalDialog extends JDialog {
         mainPanel.add(animalTypeComboBox, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         mainPanel.add(new JLabel("Name:"), gbc);
 
         gbc.gridx = 1;
@@ -52,7 +59,7 @@ public class AddAnimalDialog extends JDialog {
         mainPanel.add(nameField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         mainPanel.add(new JLabel("Gender:"), gbc);
 
         gbc.gridx = 1;
@@ -60,7 +67,7 @@ public class AddAnimalDialog extends JDialog {
         mainPanel.add(genderComboBox, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         mainPanel.add(new JLabel("Weight:"), gbc);
 
         gbc.gridx = 1;
@@ -68,7 +75,7 @@ public class AddAnimalDialog extends JDialog {
         mainPanel.add(weightField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
         mainPanel.add(new JLabel("Speed:"), gbc);
 
         gbc.gridx = 1;
@@ -76,7 +83,7 @@ public class AddAnimalDialog extends JDialog {
         mainPanel.add(speedField, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 6;
+        gbc.gridy = 7;
         mainPanel.add(new JLabel("Energy per meter:"), gbc);
 
         gbc.gridx = 1;
@@ -84,7 +91,7 @@ public class AddAnimalDialog extends JDialog {
         mainPanel.add(energyPerMeter, gbc);
 
         gbc.gridx = 0;
-        gbc.gridy = 7;
+        gbc.gridy = 8;
         mainPanel.add(new JLabel("Image:"), gbc);
 
         gbc.gridx = 1;
@@ -93,7 +100,7 @@ public class AddAnimalDialog extends JDialog {
 
         dynamicPanel = new JPanel(new GridBagLayout());
         gbc.gridx = 0;
-        gbc.gridy = 8;
+        gbc.gridy = 9;
         gbc.gridwidth = 2;
         mainPanel.add(dynamicPanel, gbc);
 
@@ -330,6 +337,7 @@ public class AddAnimalDialog extends JDialog {
 
     private void updateAnimalTypeComboBox() {
         animalTypeComboBox.removeAllItems();
+        groupaPanel.removeAll();
         String selectedComp = (String) compType.getSelectedItem();
         String[] animalTypes = new String[]{};
 
@@ -337,12 +345,18 @@ public class AddAnimalDialog extends JDialog {
             switch (selectedComp) {
                 case "Land":
                     animalTypes = new String[]{"Cat", "Dog", "Snake", "Alligator"};
+                    if(tournament[0] >= 1)
+                        updateGroupsPanel(0, tournament);
                     break;
                 case "Water":
                     animalTypes = new String[]{"Dolphin", "Whale", "Alligator"};
+                    if(tournament[1] >= 1)
+                        updateGroupsPanel(1, tournament);
                     break;
                 case "Air":
                     animalTypes = new String[]{"Eagle", "Pigeon"};
+                    if(tournament[2] >= 1)
+                        updateGroupsPanel(2, tournament);
                     break;
                 default:
                     animalTypes = new String[]{};
@@ -356,6 +370,22 @@ public class AddAnimalDialog extends JDialog {
 
         //animalTypeComboBox.revalidate();
         //animalTypeComboBox.repaint();
+    }
+
+    private void updateGroupsPanel(int type, int[] tournament){
+        groupaPanel.removeAll();
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5);
+
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        groupaPanel.add(new JLabel("Choose group:"), gbc);
+        gbc.gridx = 1;
+        group = new JComboBox<>();
+        group.addItem("new group");
+        for (int i = 1; i <= tournament[0]; i++)
+            group.addItem(String.valueOf(i));
+        groupaPanel.add(group, gbc);
     }
 
     private void updateImageComboBox(String selectedAnimal) {
